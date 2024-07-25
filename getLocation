@@ -1,0 +1,28 @@
+""""通过地名获取坐标"""
+import requests
+
+
+def get_here_coordinates(api_key, address):
+    url = "https://geocode.search.hereapi.com/v1/geocode"
+    params = {
+        'q': address,
+        'apiKey': api_key
+    }
+    response = requests.get(url, params=params)
+    result = response.json()
+    
+    if result['items']:
+        location = result['items'][0]['position']
+        return location['lat'], location['lng']
+    else:
+        return None, None
+
+
+# 使用示例
+api_key = 'HVUdIGdNOKrYznQMJggAWC56yQodKH1hcTY-51Lnr_c'
+while True:
+    address = input("Please enter an address (or type 'exit' to quit): ")
+    if address.lower() == 'exit':
+        break  # 如果用户输入 'exit'，则退出循环
+    latitude, longitude = get_here_coordinates(api_key, address)
+    print(f"纬度, 径度: {latitude}, {longitude}")
